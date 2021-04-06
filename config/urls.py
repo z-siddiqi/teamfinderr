@@ -21,5 +21,5 @@ urlpatterns = [
     path('api/v1/dj-rest-auth/', include('dj_rest_auth.urls')),
     path('api/v1/dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/v1/projects/', include('projects.urls')),
-   
+    path('api/v1/profiles/', include('profiles.urls')),
 ]
