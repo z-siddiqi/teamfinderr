@@ -33,7 +33,7 @@ class Project(models.Model): # a project that a user will create
     name = models.CharField(max_length=200) #charfield limited to 255 characters
     description = models.TextField(max_length=500) #Textfield >255 characters
     #owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
-    members = models.ManyToManyField(UserProfile, through="Membership") #related_name makes it easier to query e.g. profile.projects
+    members = models.ManyToManyField(UserProfile, through="ProjectMembership") #related_name makes it easier to query e.g. profile.projects
     #max_members = models.PositiveIntegerField() # the maximum number of people that a project can have (user defined and varies between projects)
     skills = models.ManyToManyField(Skill)
     #roles_req = models.ManyToManyField(Role)
@@ -45,7 +45,7 @@ class Project(models.Model): # a project that a user will create
     def __str__(self):
         return f'{self.name}'
         
-class Membership(models.Model):
+class ProjectMembership(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     invite_reason = models.CharField(max_length=64)
@@ -57,3 +57,12 @@ class Membership(models.Model):
 # make request model
 # allow any member to accept requests
 # each project has requests
+
+
+class ProjectMembershipRequest(models.Model):
+    from_user = models.ForeignKey(UserProfile, related_name='requests', on_delete=models.CASCADE)
+    to_project = models.ForeignKey(Project, related_name='requests', on_delete=models.CASCADE)
+
+
+
+

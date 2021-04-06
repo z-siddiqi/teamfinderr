@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Project, Membership
+from .models import Project, ProjectMembership
 
 from profiles.serializers import UserProfileSerializer
 
@@ -12,9 +12,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
 
 
-class MembershipSerializer(serializers.ModelSerializer):
+class ProjectMembershipSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer(read_only=True)
 
     class Meta:
         fields = ('user', 'invite_reason')
-        model = Membership
+        model = ProjectMembership
