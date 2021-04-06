@@ -26,6 +26,5 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         project = Project.objects.get(pk=self.kwargs["project_pk"])
-        requests = ProjectMembershipRequest.objects.filter(project=project)
+        requests = ProjectMembershipRequest.objects.filter(to_project=project)
         return requests
-        

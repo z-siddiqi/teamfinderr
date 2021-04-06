@@ -19,6 +19,7 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         fields = ('user', 'invite_reason')
         model = ProjectMembership
 
+
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
     to_project = ProjectSerializer(read_only=True)
     from_user = UserProfileSerializer(read_only=True)

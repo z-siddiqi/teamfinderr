@@ -65,7 +65,3 @@ class ProjectMembershipRequest(models.Model):
 
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
-
-
-
-
