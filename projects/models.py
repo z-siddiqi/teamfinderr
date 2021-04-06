@@ -63,6 +63,9 @@ class ProjectMembershipRequest(models.Model):
     from_user = models.ForeignKey(UserProfile, related_name='requests', on_delete=models.CASCADE)
     to_project = models.ForeignKey(Project, related_name='requests', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.from_user} to {self.to_project}'
+
 
 
 
