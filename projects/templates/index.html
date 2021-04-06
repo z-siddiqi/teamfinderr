@@ -1,0 +1,3 @@
+{% for connection in request.user.userprofile.followers.all %}
+<p> {{ connection }}</p>
+{% endfor %}

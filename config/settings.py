@@ -144,7 +144,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.JSONRenderer', #Changed from browsable API to JSON Renderer
     ],
     'SEARCH_PARAM': 'q',
 }
