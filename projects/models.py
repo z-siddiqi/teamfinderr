@@ -52,4 +52,8 @@ class Membership(models.Model):
 
     def __str__(self):
         return f'{self.user}{self.project}'
-    
+
+
+# make request model
+# allow any member to accept requests
+# each project has requests
