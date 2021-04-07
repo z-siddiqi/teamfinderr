@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from .models import UserProfile, Skill
 from .serializers import UserProfileSerializer, SkillSerializer
 
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -31,7 +32,13 @@ class UserProfileViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mix
         
         return obj
 
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
+
     def perform_create(self, serializer):
+        queryset = UserProfile.objects.filter(user=self.request.user)
+        if queryset.exists():
+            raise ValidationError('You already have a profile')
         serializer.save(user=self.request.user)
 
     
