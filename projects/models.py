@@ -81,7 +81,14 @@ class ProjectMembershipRequest(models.Model):
                                                                         invite_reason="Role") # creates a ProjectMembership object with the from_user property
             member.save() 
             self.to_project.members.add(self.from_user)
-        return self
+            self.delete()
+
+        elif self.status == "declined":
+            self.delete()
+
+        #return self
+
+    
 
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
