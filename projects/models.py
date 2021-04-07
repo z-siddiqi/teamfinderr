@@ -1,9 +1,11 @@
 from django.db import models
 from django.core.validators import  MaxValueValidator, MinValueValidator
 from profiles.models import UserProfile
+from django.contrib.auth import get_user_model
 from enum import Enum
 
 # Create your models here.
+User = get_user_model()
 
 class SkillType(models.Model):  # The type that the skill falls under -> e.g. python type is coding 
     name = models.CharField(max_length=200)
@@ -32,7 +34,7 @@ class Role(models.Model): # Role is the job role that a project requires  e.g. p
 class Project(models.Model): # a project that a user will create
     name = models.CharField(max_length=200) #charfield limited to 255 characters
     description = models.TextField(max_length=500) #Textfield >255 characters
-    #owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(UserProfile, through="ProjectMembership") #related_name makes it easier to query e.g. profile.projects
     #max_members = models.PositiveIntegerField() # the maximum number of people that a project can have (user defined and varies between projects)
     skills = models.ManyToManyField(Skill)
