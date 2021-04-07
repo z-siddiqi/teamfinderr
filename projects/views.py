@@ -1,18 +1,20 @@
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+from rest_framework.permissions import IsAuthenticated, BasePermission
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer
+from rest_framework.response import Response
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-
+    
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.profile)
 
-
+        
 class ProjectMembershipViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipSerializer
 
@@ -21,6 +23,15 @@ class ProjectMembershipViewSet(viewsets.ModelViewSet):
         members = ProjectMembership.objects.filter(project=project)
         return members
 
+      
+class IsMember(BasePermission):
+    
+    def has_object_permission(self, request, view, obj):
+        if request.method == "PATCH":
+            project = obj.to_project
+            return project.project_memberships.filter(user=request.user.profile).exists()
+
+          
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipRequestSerializer
     
@@ -32,3 +43,9 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
         serializer.save(from_user=self.request.user.profile,to_project=project)
+
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+        
+        

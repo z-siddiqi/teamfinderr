@@ -48,8 +48,8 @@ class Project(models.Model): # a project that a user will create
         return f'{self.name}'
         
 class ProjectMembership(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, related_name="project_memberships", on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name="project_memberships", on_delete=models.CASCADE)
     invite_reason = models.CharField(max_length=64)
 
     def __str__(self):
@@ -64,6 +64,8 @@ class ProjectMembership(models.Model):
 class ProjectMembershipRequest(models.Model):
     from_user = models.ForeignKey(UserProfile, related_name='requests', on_delete=models.CASCADE)
     to_project = models.ForeignKey(Project, related_name='requests', on_delete=models.CASCADE)
+    status = models.CharField(max_length=8, choices=(("accepted", "Accepted"), ("pending", "Pending"), ("declined", "Declined")), default="pending")
+
 
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
