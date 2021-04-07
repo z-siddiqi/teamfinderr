@@ -43,7 +43,15 @@ class Project(models.Model): # a project that a user will create
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True,blank=True)
 
-
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.members.exists(): # only run when project is created
+            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self,invite_reason="Owner") # creates a ProjectMembership object with the project owner
+            # member.save() # save current object state to record
+            memberProfile = UserProfile.objects.filter(user_id=member.user_id).first() # filter User profiles for the matching user ID
+            self.members.add(memberProfile)
+        return self
+    
     def __str__(self):
         return f'{self.name}'
         
