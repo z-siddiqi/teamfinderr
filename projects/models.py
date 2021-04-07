@@ -46,8 +46,8 @@ class Project(models.Model): # a project that a user will create
         return f'{self.name}'
         
 class ProjectMembership(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, related_name="project_memberships", on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name="project_memberships", on_delete=models.CASCADE)
     invite_reason = models.CharField(max_length=64)
 
     def __str__(self):

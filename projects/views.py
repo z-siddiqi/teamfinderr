@@ -38,7 +38,7 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
         serializer.save(from_user=self.request.user.profile,to_project=project)
 
-    def update(self, serializer, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
         

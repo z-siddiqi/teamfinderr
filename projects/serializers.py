@@ -25,5 +25,5 @@ class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
     from_user = UserProfileSerializer(read_only=True)
 
     class Meta:
-        fields = ('to_project', 'from_user', 'status')
+        fields = ('id', 'to_project', 'from_user', 'status')
         model = ProjectMembershipRequest
