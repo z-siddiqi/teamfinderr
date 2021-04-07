@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, BasePermission
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
-from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer
+from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer,ProjectMembershipRequestNoStatusSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -29,10 +29,25 @@ class IsMember(BasePermission):
             project = obj.to_project
             return project.project_memberships.filter(user=request.user.profile).exists()
 
+      
+      
+      
           
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipRequestSerializer
     permission_classes = [IsAuthenticated,IsMember]
+    
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        print(self.kwargs)
+        if self.request.method == "PATCH":
+            req = ProjectMembershipRequest.objects.get(pk=self.kwargs["pk"])
+            print(req.status)
+            if req.responded == True:
+                serializer_class = ProjectMembershipRequestNoStatusSerializer
+            
+        return serializer_class
+    
     def get_queryset(self):
         project = Project.objects.get(pk=self.kwargs["project_pk"])
         requests = ProjectMembershipRequest.objects.filter(to_project=project)

@@ -63,28 +63,24 @@ class ProjectMembership(models.Model):
         return f'{self.user}{self.project}'
 
 
-# make request model
-# allow any member to accept requests
-# each project has requests
-
 
 class ProjectMembershipRequest(models.Model):
     from_user = models.ForeignKey(UserProfile, related_name='requests', on_delete=models.CASCADE)
     to_project = models.ForeignKey(Project, related_name='requests', on_delete=models.CASCADE)
     status = models.CharField(max_length=8, choices=(("accepted", "Accepted"), ("pending", "Pending"), ("declined", "Declined")), default="pending")
+    responded = models.BooleanField(blank=True,null=True,default=False)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.status == "accepted": 
-            member, created = ProjectMembership.objects.get_or_create(user=self.from_user, 
-                                                                        project=self.to_project,
-                                                                        invite_reason="Role") # creates a ProjectMembership object with the from_user property
-            member.save() 
-            self.to_project.members.add(self.from_user)
-            self.delete()
-
-        elif self.status == "declined":
-            self.delete()
+        if (self.status) in ['accepted','declined'] : # Once the request has been responded to be a project member -> set self.responded to true 
+            if self.status == "accepted":  # If the request has been set to accepted -> add the from_user (UserProfile) to the project members 
+                member, created = ProjectMembership.objects.get_or_create(user=self.from_user, 
+                                                                            project=self.to_project,
+                                                                            invite_reason="Role") # creates a ProjectMembership object with the from_user property
+                member.save() 
+                self.to_project.members.add(self.from_user)
+            self.responded = True
+        super().save(*args, **kwargs)                   
+        return self
 
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
