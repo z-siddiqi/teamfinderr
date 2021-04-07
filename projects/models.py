@@ -38,8 +38,8 @@ class Project(models.Model): # a project that a user will create
     skills = models.ManyToManyField(Skill)
     #roles_req = models.ManyToManyField(Role)
     #difficulty = models.PositiveIntegerField(validators=[MaxValueValidator(5),MinValueValidator(1)])
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(null=True,blank=True)
 
 
     def __str__(self):
