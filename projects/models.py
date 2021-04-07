@@ -86,10 +86,6 @@ class ProjectMembershipRequest(models.Model):
         elif self.status == "declined":
             self.delete()
 
-        #return self
-
-    
-
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
 
