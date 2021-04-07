@@ -40,10 +40,8 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         serializer_class = self.serializer_class
-        print(self.kwargs)
         if self.request.method == "PATCH":
             req = ProjectMembershipRequest.objects.get(pk=self.kwargs["pk"])
-            print(req.status)
             if req.responded == True:
                 serializer_class = ProjectMembershipRequestNoStatusSerializer
             

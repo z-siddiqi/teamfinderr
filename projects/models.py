@@ -65,6 +65,7 @@ class ProjectMembership(models.Model):
 class ProjectMembershipRequest(models.Model):
     from_user = models.ForeignKey(UserProfile, related_name='requests', on_delete=models.CASCADE)
     to_project = models.ForeignKey(Project, related_name='requests', on_delete=models.CASCADE)
+    # role = models.ForeignKey(Role,related_name='requests',on_delete=models.CASCADE)
     status = models.CharField(max_length=8, choices=(("accepted", "Accepted"), ("pending", "Pending"), ("declined", "Declined")), default="pending")
     responded = models.BooleanField(blank=True,null=True,default=False)
 

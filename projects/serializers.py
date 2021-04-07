@@ -31,6 +31,8 @@ class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
         model = ProjectMembershipRequest
 
 class ProjectMembershipRequestNoStatusSerializer(ProjectMembershipRequestSerializer):
+    
     class Meta:
-        fields = ('id','to_project','from_user')
+        fields = ('id','to_project','from_user','status')
+        read_only_fields = ('status',)
         model = ProjectMembershipRequest
