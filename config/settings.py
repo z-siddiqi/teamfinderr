@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_yasg',
 
     # local
     'profiles.apps.ProfilesConfig',
