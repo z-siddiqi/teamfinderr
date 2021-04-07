@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, BasePermission
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer
-from rest_framework.response import Response, BasePermission
+from rest_framework.response import Response
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
