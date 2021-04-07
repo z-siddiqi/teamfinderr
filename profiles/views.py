@@ -26,15 +26,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        user = super().get_object()
-        obj = user.profile
-        
-        return obj
-
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
-
     def perform_create(self, serializer):
         queryset = UserProfile.objects.filter(user=self.request.user)
         if queryset.exists():
