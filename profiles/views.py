@@ -10,28 +10,26 @@ from rest_framework.response import Response
 from .models import UserProfile, Skill
 from .serializers import UserProfileSerializer, SkillSerializer
 
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
 
-class UserProfileViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserProfileViewSet(viewsets.ModelViewSet):
     """
     post: create user profile
     get: return user profile
     put/patch: update user profile bio
     """
 
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
-    
-    def get_object(self):
-        user = super().get_object()
-        obj = user.profile
-        
-        return obj
 
     def perform_create(self, serializer):
+        queryset = UserProfile.objects.filter(user=self.request.user)
+        if queryset.exists():
+            raise ValidationError('You already have a profile')
         serializer.save(user=self.request.user)
 
     
