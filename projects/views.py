@@ -9,8 +9,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(owner=self.request.user)
 
 
 class ProjectMembershipViewSet(viewsets.ModelViewSet):
@@ -28,3 +28,7 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
         project = Project.objects.get(pk=self.kwargs["project_pk"])
         requests = ProjectMembershipRequest.objects.filter(to_project=project)
         return requests
+    
+    def perform_create(self, serializer):
+        project = Project.objects.get(pk=self.kwargs['project_pk'])
+        serializer.save(from_user=self.request.user.profile,to_project=project)
