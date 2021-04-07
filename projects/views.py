@@ -46,7 +46,7 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
             request = self.get_object()
             request.status = status 
             request.save()
-            serializer = ProjectMembershipRequestSerializer
+            serializer = ProjectMembershipRequestSerializer(data=request)
             print(status)
             #return Response(serializer.data)
         #kwargs['partial'] = True
