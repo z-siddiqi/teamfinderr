@@ -10,7 +10,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user.profile)
 
 
 class ProjectMembershipViewSet(viewsets.ModelViewSet):

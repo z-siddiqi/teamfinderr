@@ -34,7 +34,7 @@ class Role(models.Model): # Role is the job role that a project requires  e.g. p
 class Project(models.Model): # a project that a user will create
     name = models.CharField(max_length=200) #charfield limited to 255 characters
     description = models.TextField(max_length=500) #Textfield >255 characters
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile, related_name='projects_owned', on_delete=models.CASCADE)
     members = models.ManyToManyField(UserProfile, through="ProjectMembership") #related_name makes it easier to query e.g. profile.projects
     #max_members = models.PositiveIntegerField() # the maximum number of people that a project can have (user defined and varies between projects)
     skills = models.ManyToManyField(Skill)
