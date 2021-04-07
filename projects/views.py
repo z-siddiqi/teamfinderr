@@ -10,7 +10,11 @@ from rest_framework.response import Response
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user.profile)
 
+        
 class ProjectMembershipViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipSerializer
 
@@ -19,6 +23,7 @@ class ProjectMembershipViewSet(viewsets.ModelViewSet):
         members = ProjectMembership.objects.filter(project=project)
         return members
 
+      
 class IsMember(BasePermission):
     
     def has_object_permission(self, request, view, obj):
@@ -26,6 +31,7 @@ class IsMember(BasePermission):
             project = obj.to_project
             return project.project_memberships.filter(user=request.user.profile).exists()
 
+          
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipRequestSerializer
     
