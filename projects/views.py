@@ -1,10 +1,8 @@
-from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, BasePermission
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer
-from rest_framework.response import Response
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -34,7 +32,7 @@ class IsMember(BasePermission):
           
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipRequestSerializer
-    
+    permission_classes = [IsAuthenticated,IsMember]
     def get_queryset(self):
         project = Project.objects.get(pk=self.kwargs["project_pk"])
         requests = ProjectMembershipRequest.objects.filter(to_project=project)
