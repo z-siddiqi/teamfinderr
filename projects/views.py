@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from .models import Project, ProjectMembership, ProjectMembershipRequest
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer,ProjectMembershipRequestNoStatusSerializer
 
+from django.core.exceptions import ValidationError
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -55,7 +56,12 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
+        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project)
+        print(queryset)
+        if queryset.exists():
+            raise ValidationError('You have already requested to join this project')
         serializer.save(from_user=self.request.user.profile,to_project=project)
+
 
     def update(self, request, *args, **kwargs):
         kwargs['partial'] = True
