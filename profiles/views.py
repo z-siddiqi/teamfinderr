@@ -42,13 +42,19 @@ class UserProfileSearchView(ListAPIView):
     
     
 class UserProfileSkillsViewSet(viewsets.ModelViewSet):
-    queryset = Skill.objects.all()
     serializer_class = UserProfileSkillSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
+        skills = user_profile.skills
+        return skills
+
     
     def perform_create(self, serializer):
         user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
         skill, created = Skill.objects.get_or_create(name=self.request.data['name'],category=self.request.data['category']) 
         user.skills.add(skill) # adds skill to user profile
+        serializer.save()
         
     
