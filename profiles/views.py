@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import UserProfile, Skill
-from .serializers import UserProfileSerializer, SkillSerializer, UserProfileSkillSerializer
+from .serializers import UserProfileSerializer, UserProfileSkillSerializer
 
 from django.core.exceptions import ValidationError
 
