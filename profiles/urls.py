@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_nested import routers
 
-from .views import UserProfileViewSet, UserProfileSearchView, UserProfileSkillsViewSet
+from .views import UserProfileViewSet, UserProfileSearchView, UserProfileSkillsViewSet, UserProfileProjectViewSet
 
 router = routers.SimpleRouter()
 router.register('', UserProfileViewSet, basename='profiles')
