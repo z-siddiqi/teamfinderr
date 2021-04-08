@@ -8,8 +8,9 @@ from profiles.serializers import UserProfileSerializer
 class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description','members') 
         model = Project
+
 
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):
@@ -18,7 +19,7 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('user', 'invite_reason')
         model = ProjectMembership
-
+# we need to fix the serialiser to not return all of the users properties
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
     to_project = ProjectSerializer(read_only=True)
