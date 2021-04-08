@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.core.validators import  MaxValueValidator, MinValueValidator
 from profiles.models import UserProfile
@@ -31,6 +32,12 @@ class Role(models.Model): # Role is the job role that a project requires  e.g. p
 # class Difficulty(models.Model):
 #     pass # project difficulty (Used to determine candidates suitability)
 
+
+class CompletedProjectsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(end_date__lt=timezone.now())
+
+
 class Project(models.Model): # a project that a user will create
     name = models.CharField(max_length=200) #charfield limited to 255 characters
     description = models.TextField(max_length=500) #Textfield >255 characters
@@ -43,6 +50,8 @@ class Project(models.Model): # a project that a user will create
     #difficulty = models.PositiveIntegerField(validators=[MaxValueValidator(5),MinValueValidator(1)])
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True,blank=True)
+    objects = models.Manager()  # default manager
+    completed_objects = CompletedProjectsManager()  # custom completed projects manager
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -90,6 +99,3 @@ class ProjectMembershipRequest(models.Model):
 
     def __str__(self):
         return f'{self.from_user} to {self.to_project}'
-
- 
-    
