@@ -18,3 +18,27 @@ How?
 ----
 
 We want to create an API for a database of users and projects/ideas. Users can create projects and then assemble teams from our pool of users.
+
+3\. Set environment variables:
+
+\`\`\`sh
+
+export 'DJANGO\_SECRET\_KEY=secret
+
+\`\`\`
+
+4\. Apply all migrations:
+
+\`\`\`sh
+
+python [manage.py](http://manage.py) migrate
+
+\`\`\`
+
+5\. Deploy web app on localhost:
+
+\`\`\`sh
+
+python [manage.py](http://manage.py) runserver
+
+\`\`\`
