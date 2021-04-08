@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import UserProfile, Skill
-from .serializers import UserProfileSerializer, SkillSerializer
+from .serializers import UserProfileSerializer, UserProfileSkillSerializer
 
 from django.core.exceptions import ValidationError
 
@@ -39,3 +39,9 @@ class UserProfileSearchView(ListAPIView):
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
     search_fields = ["user__username"]
+    
+    
+class UserProfileSkillsViewSet(viewsets.ModelViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = UserProfileSkillSerializer
+    permission_classes = [IsAuthenticated]
