@@ -2,6 +2,8 @@ from django.core.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
 from rest_framework import filters, mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import UserProfile
 from .serializers import UserProfileSerializer
@@ -23,24 +25,26 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileProjectViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user_project_memberships = ProjectMembership.objects.filter(user=self.request.user.profile)
-        user_projects = 1  # need to somehow get users projects
+        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        user_projects = Project.objects.filter(project_memberships__user=user)
         return user_projects
 
     def list(self, request, *args, **kwargs):
-        status = request.GET['status']
-        completed_projects = Project.completed_objects.all()  # still need to filter for request.user
-        current_projects = self.get_queryset().exclude(pk__in=completed_projects)
-        if status == 'completed':
-            self.queryset = completed_projects
-        else:
-            self.queryset = current_projects
-        return super().list(request, *args, **kwargs)
+        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        queryset = self.get_queryset()
+        progress = request.GET.get('progress', None)
+        if progress:
+            completed_projects = Project.completed_objects.filter(project_memberships__user=user)
+            current_projects = queryset.exclude(pk__in=completed_projects)
+            if progress == 'completed':
+                queryset = completed_projects
+            else:
+                queryset = current_projects
+        serializer = ProjectSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserProfileSearchView(ListAPIView):
