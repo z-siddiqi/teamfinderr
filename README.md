@@ -1,4 +1,4 @@
-##***teamfinderr*** 
+##*teamfinderr* 
 is a network for skilled individuals looking to start collaborating on projects, helping ideas become reality. Whether you're a self-starter or looking to get involved in a project for your portfolio, ***teamfinderr*** provides a skill-based pairing system to meet your needs.
 
 ### Key Features
