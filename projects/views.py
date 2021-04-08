@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Project, ProjectMembership, ProjectMembershipRequest
+from .models import Project, ProjectMembership, ProjectMembershipRequest, Role
 
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer,ProjectMembershipRequestNoStatusSerializer
 from .permissions import IsMember
@@ -46,11 +46,12 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
-        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project)
+        role, created = Role.objects.get_or_create(name=self.request.data['name'])
+        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project,role=role)
         if queryset.exists():
             raise ValidationError('You have already requested to join this project')
-        serializer.save(from_user=self.request.user.profile,to_project=project)
-
+        serializer.save(from_user=self.request.user.profile,to_project=project,role=role)
+        
 
 
     def update(self, request, *args, **kwargs):
