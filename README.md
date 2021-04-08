@@ -21,11 +21,13 @@ is a network for skilled individuals looking to start collaborating on projects,
  ```
 
 3. Set environment variables:
-```$env:DJANGO_SECRET_KEY='secret'
+```
+   $env:DJANGO_SECRET_KEY='secret'
 ```
 
 4. Apply all migrations:
-```python manage.py migrate
+```
+   python manage.py migrate
 ```
 
 5. Deploy web app on localhost:
