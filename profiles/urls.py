@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from .views import UserProfileViewSet, UserProfileSearchView,Skill
+from .views import UserProfileViewSet, UserProfileSearchView
 
 router = SimpleRouter()
 router.register('', UserProfileViewSet, basename='profile')

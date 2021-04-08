@@ -1,27 +1,16 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import get_user_model
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView
+from django.core.exceptions import ValidationError
+from rest_framework.generics import ListAPIView
 from rest_framework import filters, mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from .models import UserProfile
+from .serializers import UserProfileSerializer
 
-from .models import UserProfile, Skill
-from .serializers import UserProfileSerializer, SkillSerializer
-
-from django.core.exceptions import ValidationError
-
-User = get_user_model()
+from projects.models import Project, ProjectMembership
+from projects.serializers import ProjectSerializer
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    """
-    post: create user profile
-    get: return user profile
-    put/patch: update user profile bio
-    """
-
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -32,7 +21,28 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             raise ValidationError('You already have a profile')
         serializer.save(user=self.request.user)
 
-    
+
+class UserProfileProjectViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_project_memberships = ProjectMembership.objects.filter(user=self.request.user.profile)
+        user_projects = 1  # need to somehow get users projects
+        return user_projects
+
+    def list(self, request, *args, **kwargs):
+        status = request.GET['status']
+        completed_projects = Project.completed_objects.all()  # still need to filter for request.user
+        current_projects = self.get_queryset().exclude(pk__in=completed_projects)
+        if status == 'completed':
+            self.queryset = completed_projects
+        else:
+            self.queryset = current_projects
+        return super().list(request, *args, **kwargs)
+
+
 class UserProfileSearchView(ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
