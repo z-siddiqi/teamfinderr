@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.core.validators import  MaxValueValidator, MinValueValidator
 from profiles.models import UserProfile
@@ -34,7 +35,7 @@ class Role(models.Model): # Role is the job role that a project requires  e.g. p
 
 class CompletedProjectsManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(date__gt=self.end_date)
+        return super().get_queryset().filter(end_date__lt=timezone.now())
 
 
 class Project(models.Model): # a project that a user will create
@@ -48,8 +49,8 @@ class Project(models.Model): # a project that a user will create
     #difficulty = models.PositiveIntegerField(validators=[MaxValueValidator(5),MinValueValidator(1)])
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True,blank=True)
-    objects = models.Manager()
-    completed_objects = CompletedProjectsManager()
+    objects = models.Manager()  # default manager
+    completed_objects = CompletedProjectsManager()  # custom completed projects manager
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
