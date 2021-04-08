@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest, Role
-
+from django.db import IntegrityError
 from .serializers import ProjectSerializer, ProjectMembershipSerializer, ProjectMembershipRequestSerializer,ProjectMembershipRequestNoStatusSerializer
 from .permissions import IsMember
 
@@ -47,11 +47,10 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
         role, created = Role.objects.get_or_create(name=self.request.data['name'])
-        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project,role=role)
-        if queryset.exists():
-            raise ValidationError('You have already requested to join this project')
-        serializer.save(from_user=self.request.user.profile,to_project=project,role=role)
-        
+        try: 
+            serializer.save(from_user=self.request.user.profile,to_project=project,role=role)
+        except IntegrityError as err:
+            raise IntegrityError('You have already requested to join this project')
 
 
     def update(self, request, *args, **kwargs):
