@@ -46,7 +46,7 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
-        role, created = Role.objects.get_or_create(name=self.request.data['name'], name=self.request.data['category'])
+        role, created = Role.objects.get_or_create(name=self.request.data['name'], category=self.request.data['category'])
         try: 
             serializer.save(from_user=self.request.user.profile,to_project=project,role=role)
         except IntegrityError as err:

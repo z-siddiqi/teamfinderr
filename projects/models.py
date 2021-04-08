@@ -19,7 +19,7 @@ class Project(models.Model): # a project that a user will create
     description = models.TextField(max_length=500) #Textfield >255 characters
     owner = models.ForeignKey(UserProfile, related_name='projects_owned', on_delete=models.CASCADE)
     members = models.ManyToManyField(UserProfile, through="ProjectMembership") #related_name makes it easier to query e.g. profile.projects
-    roles = models.ManyToManyField(Role,through='ProjectMembership')
+    roles = models.ManyToManyField(Role, through='ProjectMembership')
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True,blank=True)
     objects = models.Manager()  # default manager
