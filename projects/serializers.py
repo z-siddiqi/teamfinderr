@@ -16,7 +16,7 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer(read_only=True)
 
     class Meta:
-        fields = ('user', 'invite_reason','role')
+        fields = ('user', 'message','role')
         model = ProjectMembership
 # we need to fix the serialiser to not return all of the users properties#
 

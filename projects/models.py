@@ -48,7 +48,7 @@ class Project(models.Model): # a project that a user will create
         super().save(*args, **kwargs)
         if not self.members.exists(): # only run when project is created
             role, created = Role.objects.get_or_create(name="owner")
-            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self,invite_reason="Owner",role=role) # creates a ProjectMembership object with the project owner
+            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self,role=role) # creates a ProjectMembership object with the project owner
             member.save()
             self.members.add(self.owner)
         return self
@@ -60,7 +60,7 @@ class ProjectMembership(models.Model):
     user = models.ForeignKey(UserProfile, related_name="project_memberships", on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name="project_memberships", on_delete=models.CASCADE)
     role = models.ForeignKey(Role, related_name="project_memberships", on_delete=models.CASCADE)
-    invite_reason = models.CharField(max_length=64)
+    message = models.TextField(max_length=64, null=True)
 
     def __str__(self):
         return f'{self.user}{self.project}'
@@ -77,7 +77,6 @@ class ProjectMembershipRequest(models.Model):
             if self.status == "accepted":  # If the request has been set to accepted -> add the from_user (UserProfile) to the project members 
                 member, created = ProjectMembership.objects.get_or_create(user=self.from_user, 
                                                                             project=self.to_project,
-                                                                            invite_reason="Role",
                                                                             role=self.role) # creates a ProjectMembership object with the from_user property
                 member.save() 
                 self.to_project.members.add(self.from_user)
