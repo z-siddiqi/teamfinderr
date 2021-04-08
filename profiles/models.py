@@ -21,7 +21,7 @@ class SkillCategoryMixin(models.Model):  # The type that the skill falls under -
 
 class Skill(SkillCategoryMixin):  # table to store a skill -> skill is mapped to users and projects -> skill has a name, a category
     name = models.CharField(max_length=255)
-
+    
     def __str__(self):
         return f"{self.name} ({self.category})"
 
