@@ -46,7 +46,7 @@ class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         project = Project.objects.get(pk=self.kwargs['project_pk'])
-        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project
+        queryset = ProjectMembershipRequest.objects.filter(from_user=self.request.user.profile,to_project=project)
         if queryset.exists():
             raise ValidationError('You have already requested to join this project')
         serializer.save(from_user=self.request.user.profile,to_project=project)
