@@ -1,27 +1,18 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import get_user_model
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView
+from django.core.exceptions import ValidationError
+from rest_framework.generics import ListAPIView
 from rest_framework import filters, mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
-
-from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import UserProfile, Skill
 from .serializers import UserProfileSerializer, UserProfileSkillSerializer
 
-from django.core.exceptions import ValidationError
-
-User = get_user_model()
+from projects.models import Project, ProjectMembership
+from projects.serializers import ProjectSerializer
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    """
-    post: create user profile
-    get: return user profile
-    put/patch: update user profile bio
-    """
-
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -32,15 +23,37 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             raise ValidationError('You already have a profile')
         serializer.save(user=self.request.user)
 
-    
+
+class UserProfileProjectViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        user_projects = Project.objects.filter(project_memberships__user=user)
+        return user_projects
+
+    def list(self, request, *args, **kwargs):
+        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        queryset = self.get_queryset()
+        progress = request.GET.get('progress', None)
+        if progress:
+            completed_projects = Project.completed_objects.filter(project_memberships__user=user)
+            current_projects = queryset.exclude(pk__in=completed_projects)
+            if progress == 'completed':
+                queryset = completed_projects
+            else:
+                queryset = current_projects
+        serializer = ProjectSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class UserProfileSearchView(ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
     search_fields = ["user__username", "skills__name"]
-    
-    
+
 class UserProfileSkillsViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSkillSerializer
     permission_classes = [IsAuthenticated]
@@ -57,3 +70,4 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
         user.skills.add(skill) # adds skill to user profile
         serializer.save()
         
+
