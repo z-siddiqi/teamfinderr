@@ -38,7 +38,7 @@ class UserProfileSearchView(ListAPIView):
     serializer_class = UserProfileSerializer
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    search_fields = ["user__username"]
+    search_fields = ["user__username", "skills__name"]
     
     
 class UserProfileSkillsViewSet(viewsets.ModelViewSet):
@@ -57,4 +57,3 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
         user.skills.add(skill) # adds skill to user profile
         serializer.save()
         
-    
