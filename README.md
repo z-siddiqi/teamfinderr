@@ -1,44 +1,40 @@
-# teamfinderr
+##***teamfinderr*** 
+is a network for skilled individuals looking to start collaborating on projects, helping ideas become reality. Whether you're a self-starter or looking to get involved in a project for your portfolio, ***teamfinderr*** provides a skill-based pairing system to meet your needs.
 
-Why?
-----
+### Key Features
 
-As graduates trying to get into tech, we often have ideas which we would like to implement but dont necessarily have all of the skills to do so. Unless you already know people who could fill the gaps, the learning curve can become so steep that implementing the idea seems like an impossible task.
+- Create Project
+- Project Collaboration System
+- Join project teams and be assigned to roles
+- Database of users and projects
+- Authenticate users
+- Documentation
+- View
 
-  
+### Setup Locally
 
-What?
------
+1. Clone the repository locally.
+2. Set up all necessary dependencies:
+ ```python -m venv .env
+    source .env/scripts/activate or .env/bin/activate
+    pip install -r requirements.txt
+ ```
 
-Teamfinderr solves this problem by creating a network of skilled people that are ready and willing to collaborate on projects and help ideas come to fruition. The objective of teamfinderr is to enable our users to start their own ventures and find the necessary team members to succeed.
+3. Set environment variables:
+```$env:DJANGO_SECRET_KEY='secret'
+```
 
-  
+4. Apply all migrations:
+```python manage.py migrate
+```
 
-How?
-----
+5. Deploy web app on localhost:
+```
+   python manage.py runserver
+```
 
-We want to create an API for a database of users and projects/ideas. Users can create projects and then assemble teams from our pool of users.
+### Tools Used
 
-3\. Set environment variables:
-
-\`\`\`sh
-
-export 'DJANGO\_SECRET\_KEY=secret
-
-\`\`\`
-
-4\. Apply all migrations:
-
-\`\`\`sh
-
-python [manage.py](http://manage.py) migrate
-
-\`\`\`
-
-5\. Deploy web app on localhost:
-
-\`\`\`sh
-
-python [manage.py](http://manage.py) runserver
-
-\`\`\`
+- Django
+- Django Rest Framework
+- Postman
