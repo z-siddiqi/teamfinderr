@@ -3,11 +3,6 @@ from rest_framework import serializers
 from .models import Skill, UserProfile
 
 
-class SkillSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Skill
-        fields = '__all__'
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -19,3 +14,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ["user_id", "username", "bio", "skills"]
+        
+class UserProfileSkillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Skill
+        fields = ["name", "category"]
+        
+

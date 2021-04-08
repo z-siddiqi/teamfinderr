@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import UserProfile
-from .serializers import UserProfileSerializer
+from .models import UserProfile, Skill
+from .serializers import UserProfileSerializer, UserProfileSkillSerializer
 
 from projects.models import Project, ProjectMembership
 from projects.serializers import ProjectSerializer
@@ -53,3 +53,19 @@ class UserProfileSearchView(ListAPIView):
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
     search_fields = ["user__username"]
+
+class UserProfileSkillsViewSet(viewsets.ModelViewSet):
+    serializer_class = UserProfileSkillSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
+        skills = user_profile.skills
+        return skills
+
+    
+    def perform_create(self, serializer):
+        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        skill, created = Skill.objects.get_or_create(name=self.request.data['name'],category=self.request.data['category']) 
+        user.skills.add(skill) # adds skill to user profile
+        serializer.save()
