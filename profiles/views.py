@@ -52,7 +52,7 @@ class UserProfileSearchView(ListAPIView):
     serializer_class = UserProfileSerializer
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    search_fields = ["user__username"]
+    search_fields = ["user__username", "skills__name"]
 
 class UserProfileSkillsViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSkillSerializer
@@ -69,3 +69,5 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
         skill, created = Skill.objects.get_or_create(name=self.request.data['name'],category=self.request.data['category']) 
         user.skills.add(skill) # adds skill to user profile
         serializer.save()
+        
+

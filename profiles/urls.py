@@ -12,6 +12,7 @@ user_skills_router.register('skills',UserProfileSkillsViewSet,basename='profile-
 user_projects_router = routers.NestedSimpleRouter(router, '', lookup='profile')
 user_projects_router.register('projects', UserProfileProjectViewSet, basename='profile-projects')
 
+
 urlpatterns = [
     path("search/", UserProfileSearchView.as_view(), name="profile-search"),
 ]
