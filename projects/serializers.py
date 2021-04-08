@@ -7,7 +7,7 @@ from profiles.serializers import UserProfileSerializer
 class RoleSerializer(serializers.ModelSerializer):
     
     class Meta:
-        fields = ('name', 'id')
+        fields = ('name', 'id', 'category')
         model = Project
 
 
