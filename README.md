@@ -42,6 +42,6 @@ A network for skilled individuals looking to start collaborating on projects, he
 - Django Rest Framework
 - Postman
 
-### Overview
+### Model Overview
 ![models](https://user-images.githubusercontent.com/78368044/114190867-b4328380-9943-11eb-8296-5400710dcffc.png)
 
