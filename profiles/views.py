@@ -20,7 +20,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         queryset = UserProfile.objects.filter(user=self.request.user)
         if queryset.exists():
-            raise ValidationError('You already have a profile')
+            raise ValidationError("You already have a profile")
         serializer.save(user=self.request.user)
 
 
@@ -28,18 +28,20 @@ class UserProfileProjectViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        user = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
         user_projects = Project.objects.filter(project_memberships__user=user)
         return user_projects
 
     def list(self, request, *args, **kwargs):
-        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
+        user = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
         queryset = self.get_queryset()
-        progress = request.GET.get('progress', None)
+        progress = request.GET.get("progress", None)
         if progress:
-            completed_projects = Project.completed_objects.filter(project_memberships__user=user)
+            completed_projects = Project.completed_objects.filter(
+                project_memberships__user=user
+            )
             current_projects = queryset.exclude(pk__in=completed_projects)
-            if progress == 'completed':
+            if progress == "completed":
                 queryset = completed_projects
             else:
                 queryset = current_projects
@@ -54,6 +56,7 @@ class UserProfileSearchView(ListAPIView):
     permission_classes = [IsAuthenticated]
     search_fields = ["user__username", "skills__name"]
 
+
 class UserProfileSkillsViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSkillSerializer
     permission_classes = [IsAuthenticated]
@@ -63,11 +66,10 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
         skills = user_profile.skills
         return skills
 
-    
     def perform_create(self, serializer):
-        user = UserProfile.objects.get(pk=self.kwargs['profile_pk'])
-        skill, created = Skill.objects.get_or_create(name=self.request.data['name'],category=self.request.data['category']) 
-        user.skills.add(skill) # adds skill to user profile
+        user = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
+        skill, created = Skill.objects.get_or_create(
+            name=self.request.data["name"], category=self.request.data["category"]
+        )
+        user.skills.add(skill)  # adds skill to user profile
         serializer.save()
-        
-
