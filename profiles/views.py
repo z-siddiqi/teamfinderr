@@ -68,7 +68,7 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = UserProfile.objects.get(pk=self.kwargs["profile_pk"])
-        skill, created = Skill.objects.get_or_create(
-            name=self.request.data["name"], category=self.request.data["category"]
-        )
+        name = serializer.validated_data["name"]
+        category = serializer.validated_data["category"]
+        skill, created = Skill.objects.get_or_create(name=name, category=category)
         user.skills.add(skill)  # adds skill to user profile
