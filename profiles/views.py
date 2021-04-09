@@ -72,4 +72,3 @@ class UserProfileSkillsViewSet(viewsets.ModelViewSet):
             name=self.request.data["name"], category=self.request.data["category"]
         )
         user.skills.add(skill)  # adds skill to user profile
-        serializer.save()
