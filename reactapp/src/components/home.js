@@ -5,8 +5,11 @@ import React, { Component } from "react";
 export default class Home extends Component {
 
     handleClick() {
-        
         this.props.history.push('/sign-in');
+    }
+
+    projectList(){
+        this.props.history.push('/project-list')
     }
     
     render() {
@@ -14,6 +17,7 @@ export default class Home extends Component {
             <>
         <div>
         <h1>Home</h1>
+        <p>Welcome {}</p>
         <h4>Search</h4>
         <div class="input-group">
             
@@ -47,7 +51,7 @@ export default class Home extends Component {
             <button class="btn btn-success" type="button">Submit</button>
         </form>
         <br/>
-        <button class="btn btn-primary btn-block" type="button">Join a new project</button>
+        <button class="btn btn-primary btn-block" onClick={() => this.projectList()} type="button">Join a new project</button>
         <br/>
             
 

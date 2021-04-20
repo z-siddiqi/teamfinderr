@@ -11,6 +11,7 @@ import PasswordChange from "./components/passwordchange"
 import UserProfileView from './components/userprofile'
 import MembersProfileView from './components/memberprofile'
 import Home from './components/home'
+import ProjectListView from './components/projectlist'
 
 function App() {
   return (<Router>
@@ -38,6 +39,9 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to={"/password-change"}>ForgotPassword</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/project-list"}>Projects</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -55,7 +59,7 @@ function App() {
             <Route path="/password-change" component={PasswordChange} />
             <Route path="/user-profile" component={UserProfileView} />
             <Route path="/member-profile" component={MembersProfileView} />
-
+            <Route path="/project-list" component={ProjectListView} />
           </Switch>
         </div>
       </div>
