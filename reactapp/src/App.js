@@ -2,6 +2,7 @@ import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import logo from './logo.jpeg';
 
 import Login from "./components/login";
 import SignUp from "./components/signup";
@@ -9,6 +10,9 @@ import SignUp from "./components/signup";
 function App() {
   return (<Router>
     <div className="App">
+      <div>
+      <img class="logo" src={logo} alt=""/>
+      </div>
       <nav className="navbar navbar-expand-lg navbar-light fixed-top">
         <div className="container">
           <Link className="navbar-brand" to={"/sign-in"}>TeamFound inc.</Link>
@@ -22,6 +26,8 @@ function App() {
               </li>
             </ul>
           </div>
+        </div>
+        <div>
         </div>
       </nav>
 

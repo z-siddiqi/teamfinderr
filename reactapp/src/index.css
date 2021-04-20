@@ -81,3 +81,10 @@ html,
 .forgot-password a {
   color: #167bff;
 }
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
