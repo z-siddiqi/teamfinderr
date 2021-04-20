@@ -3,12 +3,14 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import logo from './logo.jpeg';
+//import { render } from 'react-dom';
 
 import Login from "./components/login";
 import SignUp from "./components/signup";
 import PasswordChange from "./components/passwordchange"
 import UserProfileView from './components/userprofile'
 import MembersProfileView from './components/memberprofile'
+import Home from './components/home'
 
 function App() {
   return (<Router>
@@ -40,9 +42,10 @@ function App() {
             <Route exact path='/' component={Login} />
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/home" component={Home} />
             <Route path="/password-change" component={PasswordChange} />
-            <Route path="/password-change" component={UserProfileView} />
-            <Route path="/password-change" component={MembersProfileView} />
+            <Route path="/user-profile" component={UserProfileView} />
+            <Route path="/member-profile" component={MembersProfileView} />
 
           </Switch>
         </div>
