@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 
 export default class Login extends Component {
+
+    handleClick() {
+        
+        this.props.history.push('/home');
+    }
+
     render() {
         return (
             <form>
@@ -29,7 +35,7 @@ export default class Login extends Component {
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-dark btn-lg btn-block">Sign in</button>
+                <button type="submit" onClick={() => this.handleClick()} className="btn btn-dark btn-lg btn-block">Sign in</button>
                 <p className="forgot-password text-right">
                    
                     <button onClick={this.someFunction}>Forgot password?</button>

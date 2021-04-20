@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 //import { BrowserRouter as Link } from 'react-router-dom'
-
+//import { useHistory } from 'react-router-dom';
 
 export default class SignUp extends Component {
+
+    handleClick() {
+        
+        this.props.history.push('/sign-in');
+    }
     
     render() {
         return (
@@ -38,9 +43,9 @@ export default class SignUp extends Component {
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-dark btn-lg btn-block">Register</button>
+                <button type="submit" onClick={() => this.handleClick()} className="btn btn-dark btn-lg btn-block">Register</button>
                 <p className="forgot-password text-right">
-                   Already registered? <button btn-primary >Log in</button>
+                   Already registered? <button btn-primary onClick={() => this.handleClick()} >Log in</button>
                 </p>
             </form>
             </>

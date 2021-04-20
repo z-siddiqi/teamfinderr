@@ -1,10 +1,17 @@
 import React, { Component } from "react";
+//import { BrowserRouter as Link } from 'react-router-dom'
+//import { useHistory } from 'react-router-dom';
 
-class HomeView extends Component {
-    state = {  }
-    render() { 
+export default class Home extends Component {
+
+    handleClick() {
+        
+        this.props.history.push('/sign-in');
+    }
+    
+    render() {
         return (
-        <>
+            <>
         <div>
         <h1>Home</h1>
         <h4>Search</h4>
@@ -50,5 +57,4 @@ class HomeView extends Component {
         );
     }
 }
- 
-export default HomeView;
+

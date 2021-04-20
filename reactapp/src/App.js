@@ -3,13 +3,14 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import logo from './logo.jpeg';
+//import { render } from 'react-dom';
 
 import Login from "./components/login";
 import SignUp from "./components/signup";
 import PasswordChange from "./components/passwordchange"
 import UserProfileView from './components/userprofile'
 import MembersProfileView from './components/memberprofile'
-import HomeView from './components/home'
+import Home from './components/home'
 
 function App() {
   return (<Router>
@@ -29,7 +30,7 @@ function App() {
                 <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to={"/user"}>User</Link>
+                <Link className="nav-link" to={"/user-profile"}>User</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to={"/home"}>Home</Link>
@@ -47,10 +48,11 @@ function App() {
             <Route exact path='/' component={Login} />
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/home" component={Home} />
             <Route path="/password-change" component={PasswordChange} />
-            <Route path="/user" component={UserProfileView} />
-            <Route path="/home" component={HomeView} />
-            <Route path="/password-change" component={MembersProfileView} />
+            <Route path="/user-profile" component={UserProfileView} />
+            <Route path="/member-profile" component={MembersProfileView} />
+
           </Switch>
         </div>
       </div>
