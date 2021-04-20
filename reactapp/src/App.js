@@ -9,6 +9,7 @@ import SignUp from "./components/signup";
 import PasswordChange from "./components/passwordchange"
 import UserProfileView from './components/userprofile'
 import MembersProfileView from './components/memberprofile'
+import HomeView from './components/home'
 
 function App() {
   return (<Router>
@@ -27,6 +28,12 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/user"}>User</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/home"}>Home</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -41,9 +48,9 @@ function App() {
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/password-change" component={PasswordChange} />
-            <Route path="/password-change" component={UserProfileView} />
+            <Route path="/user" component={UserProfileView} />
+            <Route path="/home" component={HomeView} />
             <Route path="/password-change" component={MembersProfileView} />
-
           </Switch>
         </div>
       </div>
