@@ -1,5 +1,6 @@
 from pathlib import Path
 from environs import Env
+import os
 
 env = Env()
 env.read_env()
@@ -61,7 +62,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, 'reactapp/build'), 
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -145,3 +148,7 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SITE_ID = 1
+
+STATICFILES_DIRS = [
+     os.path.join(BASE_DIR, 'reactapp/build/static'), 
+]
