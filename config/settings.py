@@ -155,3 +155,5 @@ SITE_ID = 1
 STATICFILES_DIRS = [
      os.path.join(BASE_DIR, 'reactapp/build/static'), 
 ]
+
+CSRF_TRUSTED_ORIGINS = ['localhost:3000']

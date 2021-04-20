@@ -1,5 +1,7 @@
 from django.urls import path
 from rest_framework_nested import routers
+from django.contrib import admin
+from . import views
 
 from .views import (
     UserProfileViewSet,
@@ -23,6 +25,9 @@ user_projects_router.register(
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('csrf/', views.csrf),
+    path('ping/', views.ping),
     path("search/", UserProfileSearchView.as_view(), name="profile-search"),
 ]
 

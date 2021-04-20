@@ -1,6 +1,21 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+const API_HOST = 'http://localhost:8000';
+
+let _csrfToken = null;
+
+async function getCsrfToken() {
+    if (_csrfToken === null) {
+      const response = await fetch(`${API_HOST}/csrf/`, {
+        credentials: 'include',
+      });
+      const data = await response.json();
+      _csrfToken = data.csrfToken;
+    }
+    return _csrfToken;
+  }
+  
 export default class Login extends Component {
 
     state = {
@@ -31,9 +46,15 @@ export default class Login extends Component {
         this.setState({ password: event.target.value });
         }
 
+    async componentDidMount() {
+        _csrfToken = await getCsrfToken();
+        }
+
     handleSubmit = (event) => {
         event.preventDefault();
        
+        console.log(_csrfToken);
+
         const user = {
             username: this.state.username,
             email: this.state.email,
@@ -41,9 +62,16 @@ export default class Login extends Component {
 
         }
 
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie' : `csrftoken=${_csrfToken}`
+            }
+          };
+
         console.log(user)
 
-        axios.post(`http://127.0.0.1:8000/api/v1/dj-rest-auth/login/`, { user })
+        axios.post(`http://127.0.0.1:8000/api/v1/dj-rest-auth/login/`, { user }, options)
         .then(res => {
           console.log(res);
           console.log(res.data);
@@ -78,9 +106,9 @@ export default class Login extends Component {
                     </div>
                 </div>
 
-                <button type="submit" onSubmit={() => this.redirectHome} className="btn btn-dark btn-lg btn-block">Sign in</button>
+                <button type="submit" onSubmit={this.redirectHome} className="btn btn-dark btn-lg btn-block">Sign in</button>
                 <p className="forgot-password text-right">
-                    <button onClick={() => this.redirectForgotPassword}>Forgot password?</button>
+                    <button onClick={this.redirectForgotPassword}>Forgot password?</button>
                 </p>
             </form>
         );

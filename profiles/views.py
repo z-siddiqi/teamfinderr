@@ -4,6 +4,8 @@ from rest_framework import filters, mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 from .models import UserProfile, Skill
 from .serializers import UserProfileSerializer, UserProfileSkillSerializer
@@ -11,6 +13,12 @@ from .serializers import UserProfileSerializer, UserProfileSkillSerializer
 from projects.models import Project, ProjectMembership
 from projects.serializers import ProjectSerializer
 
+#Dedicated endpoints to acess CSRFToken in React frontend.
+def csrf(request):
+    return JsonResponse({'csrfToken': get_token(request)})
+
+def ping(request):
+    return JsonResponse({'result': 'OK'})
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
