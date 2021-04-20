@@ -6,6 +6,9 @@ import logo from './logo.jpeg';
 
 import Login from "./components/login";
 import SignUp from "./components/signup";
+import PasswordChange from "./components/passwordchange"
+import UserProfileView from './components/userprofile'
+import MembersProfileView from './components/memberprofile'
 
 function App() {
   return (<Router>
@@ -37,6 +40,10 @@ function App() {
             <Route exact path='/' component={Login} />
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/password-change" component={PasswordChange} />
+            <Route path="/password-change" component={UserProfileView} />
+            <Route path="/password-change" component={MembersProfileView} />
+
           </Switch>
         </div>
       </div>
@@ -45,3 +52,4 @@ function App() {
 }
 
 export default App;
+
