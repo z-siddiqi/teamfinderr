@@ -3,8 +3,11 @@ import React, { Component } from "react";
 export default class Login extends Component {
 
     handleClick() {
-        
         this.props.history.push('/home');
+    }
+
+    forgotPassword(){
+        this.props.history.push('/password-change')
     }
 
     render() {
@@ -38,7 +41,7 @@ export default class Login extends Component {
                 <button type="submit" onClick={() => this.handleClick()} className="btn btn-dark btn-lg btn-block">Sign in</button>
                 <p className="forgot-password text-right">
                    
-                    <button onClick={this.someFunction}>Forgot password?</button>
+                    <button onClick={() => this.forgotPassword()}>Forgot password?</button>
                 </p>
             </form>
         );
