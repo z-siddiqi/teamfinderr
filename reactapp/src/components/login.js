@@ -11,7 +11,7 @@ export default class Login extends Component {
         return (
             <form>
 
-                <h3>Log in</h3>
+                <h3>Login</h3>
 
                 <div className="form-group">
                     <label>Username</label>
@@ -44,3 +44,4 @@ export default class Login extends Component {
         );
     }
 }
+
