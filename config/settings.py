@@ -140,7 +140,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",  # Changed from browsable API to JSON Renderer
@@ -156,4 +156,4 @@ STATICFILES_DIRS = [
      os.path.join(BASE_DIR, 'reactapp/build/static'), 
 ]
 
-CSRF_TRUSTED_ORIGINS = ['localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['localhost:3000', 'localhost:8000']

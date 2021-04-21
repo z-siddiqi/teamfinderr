@@ -2,21 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-
-const API_HOST = 'http://localhost:8000';
-
-let _csrfToken = null;
-
-async function getCsrfToken() {
-    if (_csrfToken === null) {
-      const response = await fetch(`${API_HOST}/csrf/`, {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      _csrfToken = data.csrfToken;
-    }
-    return _csrfToken;
-  }
   
 export default class Login extends Component {
 
