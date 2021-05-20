@@ -1,3 +1,13 @@
-.env/
-.vscode/
+# django
+*.log
+*.pot
 *.py[cod]
+__pycache__/
+db.sqlite3
+
+# environments 
+.env
+.venv/
+
+# code editor
+.vscode/
