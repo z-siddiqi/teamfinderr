@@ -41,9 +41,8 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_extensions",
     # local
-    "profiles.apps.ProfilesConfig",
-    "projects.apps.ProjectsConfig",
     "accounts.apps.AccountsConfig",
+    "projects.apps.ProjectsConfig",
 ]
 
 MIDDLEWARE = [
