@@ -26,39 +26,28 @@ class Project(models.Model):
 
 class ProjectMembership(models.Model):
     user = models.ForeignKey(User, related_name="project_memberships", on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, related_name="project_memberships", on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name="memberships", on_delete=models.CASCADE)
     role = models.CharField(max_length=200)
-    message = models.TextField(max_length=64, null=True)
 
     def __str__(self):
-        return f"{self.user}{self.project}"
+        return f"{self.user} - {self.project}"
 
 
 class ProjectMembershipRequest(models.Model):
-    from_user = models.ForeignKey(User, related_name="requests", on_delete=models.CASCADE)
-    to_project = models.ForeignKey(Project, related_name="requests", on_delete=models.CASCADE)
-    role = models.CharField(max_length=200)
-    status = models.CharField(
-        max_length=8,
-        choices=(
-            ("accepted", "Accepted"),
-            ("pending", "Pending"),
-            ("declined", "Declined"),
-        ),
-        default="pending",
+    STATUS_CHOICES = (
+        ("accepted", "Accepted"),
+        ("pending", "Pending"),
+        ("declined", "Declined"),
     )
-    responded = models.BooleanField(blank=True, null=True, default=False)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default="pending")
+    from_user = models.ForeignKey(User, related_name="sent_requests", on_delete=models.CASCADE)
+    to_project = models.ForeignKey(Project, related_name="received_requests", on_delete=models.CASCADE)
+    role = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
-        # Once the request has been responded to be a project member -> set self.responded to true
-        if (self.status) in ["accepted", "declined"]:
-            if (self.status == "accepted"):
-                member, created = ProjectMembership.objects.get_or_create(user=self.from_user, project=self.to_project, role=self.role)
-                member.save()
-                self.to_project.members.add(self.from_user)
-                self.to_project.roles.add(self.role)
-            self.responded = True
         super().save(*args, **kwargs)
+        if self.status == "accepted":
+            ProjectMembership.objects.create(user=self.from_user, project=self.to_project, role=self.role)
         return self
 
     class Meta:
