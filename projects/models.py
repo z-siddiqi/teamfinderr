@@ -2,18 +2,8 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from accounts.models import SkillCategoryMixin
-
 # Create your models here.
 User = get_user_model()
-
-
-class Role(SkillCategoryMixin):
-    # Role is the job role that a project requires  e.g. project manager, developer etc
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
 
 
 class CompletedProjectsManager(models.Manager):
@@ -26,7 +16,6 @@ class Project(models.Model):  # a project that a user will create
     description = models.TextField(max_length=500)  # Textfield >255 characters
     owner = models.ForeignKey(User, related_name="projects_owned", on_delete=models.CASCADE)
     members = models.ManyToManyField(User, through="ProjectMembership")
-    roles = models.ManyToManyField(Role, through="ProjectMembership")
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True, blank=True)
     objects = models.Manager()  # default manager
@@ -35,8 +24,7 @@ class Project(models.Model):  # a project that a user will create
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if not self.members.exists():  # only run when project is created
-            role, created = Role.objects.get_or_create(name="owner", category="management")
-            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self, role=role)
+            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self, role="owner")
             member.save()
             self.members.add(self.owner)
         return self
@@ -48,7 +36,7 @@ class Project(models.Model):  # a project that a user will create
 class ProjectMembership(models.Model):
     user = models.ForeignKey(User, related_name="project_memberships", on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name="project_memberships", on_delete=models.CASCADE)
-    role = models.ForeignKey(Role, related_name="project_memberships", on_delete=models.CASCADE)
+    role = models.CharField(max_length=200)
     message = models.TextField(max_length=64, null=True)
 
     def __str__(self):
@@ -58,7 +46,7 @@ class ProjectMembership(models.Model):
 class ProjectMembershipRequest(models.Model):
     from_user = models.ForeignKey(User, related_name="requests", on_delete=models.CASCADE)
     to_project = models.ForeignKey(Project, related_name="requests", on_delete=models.CASCADE)
-    role = models.ForeignKey(Role, related_name="requests", on_delete=models.CASCADE, blank=True, null=True)
+    role = models.CharField(max_length=200)
     status = models.CharField(
         max_length=8,
         choices=(
