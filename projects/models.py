@@ -11,26 +11,17 @@ class CompletedProjectsManager(models.Manager):
         return super().get_queryset().filter(end_date__lt=timezone.now())
 
 
-class Project(models.Model):  # a project that a user will create
-    name = models.CharField(max_length=200)  # charfield limited to 255 characters
-    description = models.TextField(max_length=500)  # Textfield >255 characters
-    owner = models.ForeignKey(User, related_name="projects_owned", on_delete=models.CASCADE)
+class Project(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(max_length=500)
     members = models.ManyToManyField(User, through="ProjectMembership")
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True, blank=True)
     objects = models.Manager()  # default manager
     completed_objects = CompletedProjectsManager()  # custom completed projects manager
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.members.exists():  # only run when project is created
-            member, created = ProjectMembership.objects.get_or_create(user=self.owner, project=self, role="owner")
-            member.save()
-            self.members.add(self.owner)
-        return self
-
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class ProjectMembership(models.Model):
