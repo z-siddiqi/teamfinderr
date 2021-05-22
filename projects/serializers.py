@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
+from accounts.serializers import CustomUserSerializer
 
 User = get_user_model()
 
@@ -13,11 +14,11 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):
-    user = User(read_only=True)
+    user = CustomUserSerializer(read_only=True)
 
     class Meta:
-        fields = ("user", "message", "role")
         model = ProjectMembership
+        fields = ["user", "role"]
 
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
