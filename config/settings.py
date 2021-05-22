@@ -141,6 +141,10 @@ REST_FRAMEWORK = {
     "SEARCH_PARAM": "q",
 }
 
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "accounts.serializers.CustomUserDetailSerializer",
+}
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SITE_ID = 1
