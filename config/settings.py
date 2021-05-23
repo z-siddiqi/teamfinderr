@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-        # 'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",  # Changed from browsable API to JSON Renderer
@@ -142,6 +142,13 @@ REST_FRAMEWORK = {
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "accounts.serializers.CustomUserDetailSerializer",
+}
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Token": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
+    "USE_SESSION_AUTH": False,
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
