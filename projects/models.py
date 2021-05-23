@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from accounts.models import SkillCategoryMixin
+
 # Create your models here.
 User = get_user_model()
 
@@ -23,13 +25,13 @@ class Project(models.Model):
         return self.name
 
 
-class ProjectMembership(models.Model):
-    user = models.ForeignKey(User, related_name="project_memberships", on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, related_name="memberships", on_delete=models.CASCADE)
+class ProjectMembership(SkillCategoryMixin):
     role = models.CharField(max_length=200)
+    user = models.ForeignKey(User, related_name="memberships", on_delete=models.CASCADE, blank=True, null=True)  # not required on create
+    project = models.ForeignKey(Project, related_name="memberships", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user} - {self.project}"
+        return f"{self.user} - {self.role} ({self.project})"
 
 
 class ProjectMembershipRequest(models.Model):
