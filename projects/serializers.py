@@ -29,16 +29,13 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
-    to_project = ProjectSerializer(read_only=True)
-    from_user = User(read_only=True)
-
     class Meta:
-        fields = ("id", "to_project", "from_user", "status")
         model = ProjectMembershipRequest
-
-
-class ProjectMembershipRequestNoStatusSerializer(ProjectMembershipRequestSerializer):
-    class Meta:
-        fields = ("id", "to_project", "from_user", "status")
-        read_only_fields = ("status",)
-        model = ProjectMembershipRequest
+        fields = ["id", "to_project", "from_user", "role", "status"]
+        validators = [
+            UniqueTogetherValidator(
+                queryset=ProjectMembershipRequest.objects.all(),
+                fields=["from_user", "to_project"],
+                message="You have already requested to join this project!",
+            )
+        ]
