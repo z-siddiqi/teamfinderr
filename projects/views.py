@@ -1,9 +1,8 @@
-from django.db import IntegrityError
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Project, ProjectMembership, ProjectMembershipRequest, Role
-from .serializers import ProjectSerializer, ProjectMembershipRequestSerializer, ProjectMembershipRequestNoStatusSerializer
+from .models import Project, ProjectMembership, ProjectMembershipRequest
+from .serializers import ProjectSerializer, ProjectMembershipRequestSerializer
 from .permissions import IsMember
 
 
@@ -19,35 +18,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
+    queryset = ProjectMembershipRequest.objects.all()
     serializer_class = ProjectMembershipRequestSerializer
     permission_classes = [IsAuthenticated, IsMember]
 
-    def get_serializer_class(self):
-        serializer_class = self.serializer_class
-        if self.request.method == "PATCH":
-            req = ProjectMembershipRequest.objects.get(pk=self.kwargs["pk"])
-            if req.responded == True:
-                serializer_class = ProjectMembershipRequestNoStatusSerializer
-
-        return serializer_class
-
-    def get_queryset(self):
-        project = Project.objects.get(pk=self.kwargs["project_pk"])
-        requests = ProjectMembershipRequest.objects.filter(to_project=project)
-        return requests
-
-    def perform_create(self, serializer):
-        project = Project.objects.get(pk=self.kwargs["project_pk"])
-        role, created = Role.objects.get_or_create(
-            name=self.request.data["name"], category=self.request.data["category"]
-        )
-        try:
-            serializer.save(
-                from_user=self.request.user.profile, to_project=project, role=role
-            )
-        except IntegrityError as err:
-            raise IntegrityError("You have already requested to join this project")
-
-    def update(self, request, *args, **kwargs):
-        kwargs["partial"] = True
-        return super().update(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        request.data.update({"from_user": request.user.id})
+        return super().create(request, *args, **kwargs)
