@@ -14,7 +14,6 @@ class CompletedProjectsManager(models.Manager):
 class Project(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=500)
-    members = models.ManyToManyField(User, through="ProjectMembership")
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True, blank=True)
     objects = models.Manager()  # default manager
