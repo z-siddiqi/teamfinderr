@@ -29,9 +29,11 @@ class ProjectMembershipViewSet(viewsets.ModelViewSet):
         return project
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # queryset just for schema generation metadata
+            return ProjectMembership.objects.none()
         project = self.get_project()
-        memberships = ProjectMembership.objects.filter(project=project)
-        return memberships
+        return ProjectMembership.objects.filter(project=project)
 
     def perform_create(self, serializer):
         project = self.get_project()
