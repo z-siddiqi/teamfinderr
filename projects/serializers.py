@@ -16,19 +16,12 @@ class ProjectMembershipDetailSerializer(serializers.ModelSerializer):
         fields = ["id", "role", "category", "user"]
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectDetailSerializer(serializers.ModelSerializer):
     memberships = ProjectMembershipDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = ["id", "name", "description", "memberships"]
-
-
-class ProjectMembershipSerializer(serializers.ModelSerializer):  
-    class Meta:
-        model = ProjectMembership
-        fields = ["id", "role", "category", "project"]
-        read_only_fields = ["project"]
 
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):

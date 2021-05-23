@@ -3,14 +3,14 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, ProjectMembership, ProjectMembershipRequest
-from .serializers import ProjectSerializer, ProjectMembershipDetailSerializer, ProjectMembershipRequestSerializer
+from .serializers import ProjectDetailSerializer, ProjectMembershipDetailSerializer, ProjectMembershipRequestSerializer
 from .permissions import IsMember
 
 
 # Create your views here.
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectDetailSerializer
     lookup_field = "id"  # make the nested router parent lookup regex project_id
     permission_classes = [IsAuthenticated]
 
