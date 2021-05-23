@@ -8,20 +8,27 @@ from accounts.serializers import CustomUserSerializer
 User = get_user_model()
 
 
-class ProjectMembershipSerializer(serializers.ModelSerializer):
+class ProjectMembershipDetailSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = ProjectMembership
-        fields = ["id", "role", "user"]
+        fields = ["id", "role", "category", "user"]
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    memberships = ProjectMembershipSerializer(many=True, read_only=True)
+    memberships = ProjectMembershipDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = ["id", "name", "description", "memberships"]
+
+
+class ProjectMembershipSerializer(serializers.ModelSerializer):  
+    class Meta:
+        model = ProjectMembership
+        fields = ["id", "role", "category", "project"]
+        read_only_fields = ["project"]
 
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
