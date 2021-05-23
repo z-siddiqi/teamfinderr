@@ -14,7 +14,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = self.request.user
         project = serializer.save()
-        ProjectMembership.objects.create(user=user, project=project, role="owner")
+        ProjectMembership.objects.create(role="owner", category="management", user=user, project=project)
 
 
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):

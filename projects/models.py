@@ -42,17 +42,17 @@ class ProjectMembershipRequest(models.Model):
     )
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default="pending")
     from_user = models.ForeignKey(User, related_name="sent_requests", on_delete=models.CASCADE)
-    to_project = models.ForeignKey(Project, related_name="received_requests", on_delete=models.CASCADE)
-    role = models.CharField(max_length=200)
+    to_membership = models.ForeignKey(ProjectMembership, related_name="received_requests", on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.status == "accepted":
-            ProjectMembership.objects.create(user=self.from_user, project=self.to_project, role=self.role)
+            self.to_membership.user = self.from_user
+            self.to_membership.save()
         return self
 
     class Meta:
-        unique_together = ("from_user", "to_project")
+        unique_together = ("from_user", "to_membership")
 
     def __str__(self):
-        return f"{self.from_user} to {self.to_project}"
+        return f"{self.from_user} to {self.to_membership}"

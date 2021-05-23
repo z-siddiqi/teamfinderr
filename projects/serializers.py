@@ -13,29 +13,25 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectMembership
-        fields = ["user", "role"]
+        fields = ["id", "role", "user"]
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    members = serializers.SerializerMethodField()
-
-    def get_members(self, obj):
-        qset = ProjectMembership.objects.filter(project=obj)
-        return [ProjectMembershipSerializer(m).data for m in qset]
+    memberships = ProjectMembershipSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
-        fields = ["id", "name", "description", "members"]
+        fields = ["id", "name", "description", "memberships"]
 
 
 class ProjectMembershipRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectMembershipRequest
-        fields = ["id", "to_project", "from_user", "role", "status"]
+        fields = ["id", "from_user", "to_membership", "status"]
         validators = [
             UniqueTogetherValidator(
                 queryset=ProjectMembershipRequest.objects.all(),
-                fields=["from_user", "to_project"],
-                message="You have already requested to join this project!",
+                fields=["from_user", "to_membership"],
+                message="You have already sent a request for this membership!",
             )
         ]
