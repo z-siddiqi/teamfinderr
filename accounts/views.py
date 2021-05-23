@@ -10,20 +10,21 @@ from .serializers import CustomUserDetailSerializer, SkillSerializer
 # Create your views here.
 class CustomUserAddSkillView(views.APIView):
     serializer_class = SkillSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            name = serializer.validated_data["name"]
-            category = serializer.validated_data["category"]
-            skill, created = Skill.objects.get_or_create(name=name, category=category)
-            request.user.skills.add(skill)
-            return Response(serializer.data, status=HTTP_201_CREATED)
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        name = serializer.validated_data["name"]
+        category = serializer.validated_data["category"]
+        skill, created = Skill.objects.get_or_create(name=name, category=category)
+        request.user.skills.add(skill)
+        return Response(serializer.data, status=HTTP_201_CREATED)
 
 
 class CustomUserRemoveSkillView(views.APIView):
     serializer_class = SkillSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_skill(self):
         skill_id = self.request.data.get("id")
@@ -45,6 +46,6 @@ class CustomUserRemoveSkillView(views.APIView):
 class CustomUserSearchView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserDetailSerializer
-    filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
     search_fields = ["username", "skills__name"]

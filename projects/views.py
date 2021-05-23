@@ -12,6 +12,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     lookup_field = "id"  # make the nested router parent lookup regex project_id
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -21,6 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class ProjectMembershipViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectMembershipDetailSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_project(self):
         project = get_object_or_404(Project, pk=self.kwargs["project_id"])
