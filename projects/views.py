@@ -1,22 +1,21 @@
+from django.db import IntegrityError
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Project, ProjectMembershipRequest, Role
-from django.db import IntegrityError
-from .serializers import (
-    ProjectSerializer,
-    ProjectMembershipRequestSerializer,
-    ProjectMembershipRequestNoStatusSerializer,
-)
+from .models import Project, ProjectMembership, ProjectMembershipRequest, Role
+from .serializers import ProjectSerializer, ProjectMembershipRequestSerializer, ProjectMembershipRequestNoStatusSerializer
 from .permissions import IsMember
 
 
+# Create your views here.
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user.profile)
+        user = self.request.user
+        project = serializer.save()
+        ProjectMembership.objects.create(user=user, project=project, role="owner")
 
 
 class ProjectMembershipRequestViewSet(viewsets.ModelViewSet):
