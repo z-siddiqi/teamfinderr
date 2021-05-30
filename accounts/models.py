@@ -11,8 +11,12 @@ class SkillCategoryMixin(models.Model):
         ("analytical", "Analytical"),
         ("creative", "Creative"),
         ("technical", "Technical"),
+        ("miscellaneous", "Miscellaneous"),
     )
     category = models.CharField(max_length=13, choices=CATEGORY_CHOICES)
+
+    class Meta:
+        abstract = True
 
 
 class Skill(SkillCategoryMixin):
